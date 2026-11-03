@@ -34,18 +34,22 @@ Making changes in the README.md file to test the jenkins software
 Again just making minor change in the README file to generate build 2 in jenkins
 
 # Deliverable - 4 (Automating CI/CD Pipeline)
+## 1. Description of CI/CD Pipeline
+This project uses a GitHub Actions CI/CD pipeline defined in `.github/workflows/ci-cd.yml`.
 
-1. Description of CI/CD Pipeline
-This project utilizes a GitHub Actions CI/CD pipeline configured at `.github/workflows/ci-cd.yml`. 
-**Trigger**: The pipeline runs automatically when code is pushed to the `main` branch or when a pull request is merged.
-**Build & Push:** It authenticates with Docker Hub using secure secrets, builds the frontend and backend Docker images, and pushes them directly to Docker Hub (`urbanaseem`).
-**Deployment:** It securely connects to our AWS EC2 instance (`Jenkins-Server`) via SSH, pulls the updated images, and restarts the containers automatically[cite: 2].
+**Trigger:** Runs automatically on pushes to `main` or when a pull request is merged into `main`.
+**Build & Push:** Authenticates with Docker Hub using repository secrets, builds the backend and frontend Docker images, and pushes them to Docker Hub (`fasiha21`).
+**Deploy:** Connects to our AWS EC2 instance over SSH, pulls the images, and restarts the containers automatically.
 
-2. Instructions to Run and Deploy the App
-**Local Run using Docker Compose:**
-  docker-compose up --build -d
-**Run Containers Manually from Docker Hub:**
-  docker pull urbanaseem/paw-track-backend:latest
-  docker pull urbanaseem/paw-track-frontend:latest
-  docker run -d --name paw-backend -p 5000:5000 urbanaseem/paw-track-backend:latest
-  docker run -d --name paw-frontend -p 80:80 urbanaseem/paw-track-frontend:latest
+**Pipeline stages:**
+1. Checkout code
+2. Log in to Docker Hub (secret-based)
+3. Build `paw-track-backend` and `paw-track-frontend` images
+4. Push both images to Docker Hub (`:latest` and `:<git-sha>`)
+5. SSH into EC2 → `docker compose pull` → `docker compose up -d`
+
+## 2. Instructions to Run and Deploy the App
+
+### Local run with Docker Compose
+```bash
+docker-compose up --build -d
