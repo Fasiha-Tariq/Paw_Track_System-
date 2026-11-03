@@ -120,7 +120,7 @@ jobs:
   deploy:
     name: Deploy to AWS EC2
     needs: build-test-push
-    runs-on: ubuntu-latest
+    runs-on: ubuntu
 
     # Deploy only after a successful push to main
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
