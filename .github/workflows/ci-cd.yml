@@ -35,22 +35,22 @@ jobs:
       # Optional Test Stage (Validates Dockerfiles can build without errors)
       - name: Test Docker Builds
         run: |
-          docker build -t frontend-test ./frontend
-          docker build -t backend-test ./backend
+          docker build -t frontend-test ./Frontend
+          docker build -t backend-test ./Backend
 
       - name: Build & Push Frontend Image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
+          context: ./Frontend
+          file: ./Frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
 
       - name: Build & Push Backend Image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
+          context: ./Backend
+          file: ./Backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
 
