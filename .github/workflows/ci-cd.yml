@@ -82,7 +82,8 @@ jobs:
             cd ~/app
             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
             docker compose pull
-            docker compose down
+            docker compose down --remove-orphans || true
+            docker rm -f paw_track_frontend paw_track_backend || true
             docker compose up -d
             docker system prune -f
         env:
