@@ -71,16 +71,21 @@ jobs:
 
       - name: SSH and Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
+        envs: DOCKER_USER,DOCKER_PASS
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script_stop: true
+          envs: DOCKER_USER,DOCKER_PASS
           script: |
             cd ~/app
-            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
             docker compose pull
             docker compose down
             docker compose up -d
             docker system prune -f
+        env:
+          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASS: ${{ secrets.DOCKERHUB_TOKEN }}
