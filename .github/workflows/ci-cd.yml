@@ -71,7 +71,6 @@ jobs:
 
       - name: SSH and Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
-        envs: DOCKER_USER,DOCKER_PASS
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
