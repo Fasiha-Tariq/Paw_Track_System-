@@ -56,6 +56,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Copy docker-compose.yml to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          source: "docker-compose.yml"
+          target: "~/app"
+
       - name: SSH and Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -65,9 +78,9 @@ jobs:
           port: 22
           script_stop: true
           script: |
-            mkdir -p ~/app && cd ~/app
+            cd ~/app
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-            docker compose pull || docker-compose pull
-            docker compose down || docker-compose down
-            docker compose up -d || docker-compose up -d
+            docker compose pull
+            docker compose down
+            docker compose up -d
             docker system prune -f
