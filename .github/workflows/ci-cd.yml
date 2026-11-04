@@ -83,7 +83,9 @@ jobs:
             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
             docker compose pull
             docker compose down --remove-orphans || true
-            docker rm -f paw_track_frontend paw_track_backend || true
+            docker rm -f $(docker ps -q) || true
+            sudo systemctl stop nginx || true
+            sudo systemctl stop apache2 || true
             docker compose up -d
             docker system prune -f
         env:
