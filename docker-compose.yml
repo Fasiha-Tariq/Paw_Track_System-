@@ -1,14 +1,18 @@
+version: '3.8'
+
 services:
   frontend:
-    build: ./Frontend
+    image: fasiha21/frontend:latest
     container_name: paw_track_frontend
     ports:
       - "80:80"
     depends_on:
       - backend
+    restart: always
 
   backend:
-    build: ./Backend
+    image: fasiha21/backend:latest
     container_name: paw_track_backend
     ports:
       - "8080:80"
+    restart: always
